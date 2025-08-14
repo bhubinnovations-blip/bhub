@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "bhub",
     "public": "build",
     "ignore": [
       "firebase.json",
