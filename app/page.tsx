@@ -1,8 +1,10 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import feather from "feather-icons";
 import Image from "next/image";
+import { title } from "process";
 
 interface Tile {
   icon?: string;
@@ -11,14 +13,19 @@ interface Tile {
   desc: string;
   delay: string;
   isButton?: boolean;
+  isSalon?: boolean;
+  isClient?: boolean;
+  isBeauty?: boolean;
+  isGYM?: boolean;
+  isTrainer?: boolean;
 }
 
 const tiles: Tile[] = [
-  { icon: "user", color: "text-blue-600 group-hover:text-blue-800", title: "Regular Client", desc: "Get salon, beautician, gym or gym trainer.", delay: "0.1s" },
-  { icon: "smartphone", color: "text-green-600 group-hover:text-green-800", title: "Salon & Spa", desc: "Your salon is our opportunity to tell your customers what you offer.", delay: "0.3s" },
-  { icon: "zap", color: "text-yellow-500 group-hover:text-yellow-700", title: "Beautician", desc: "Tell BHub more about your business we are here for you!", delay: "0.5s" },
-  { icon: "globe", color: "text-purple-600 group-hover:text-purple-800", title: "GYM", desc: "Gym will get someone do just that 'oh - and the best services too'.", delay: "0.7s" },
-  { icon: "heart", color: "text-red-500 group-hover:text-red-700", title: "GYM - Trainer", desc: "Tell BHub more about your business we are here for you!", delay: "0.9s" },
+  { icon: "user", color: "text-blue-600 group-hover:text-blue-800", title: "Regular Client", isClient: true, desc: "Get salon, beautician, gym or gym trainer.", delay: "0.1s" },
+  { icon: "smartphone", color: "text-green-600 group-hover:text-green-800", title: "Salon & Spa", isSalon: true, desc: "Your salon is our opportunity to tell your customers what you offer.", delay: "0.3s" },
+  { icon: "zap", color: "text-yellow-500 group-hover:text-yellow-700", title: "Beautician", isBeauty: true, desc: "Tell BHub more about your business we are here for you!", delay: "0.5s" },
+  { icon: "globe", color: "text-purple-600 group-hover:text-purple-800", title: "GYM", isGYM: true, desc: "Gym will get someone do just that 'oh - and the best services too'.", delay: "0.7s" },
+  { icon: "heart", color: "text-red-500 group-hover:text-red-700", title: "GYM - Trainer", isTrainer: true, desc: "Tell BHub more about your business we are here for you!", delay: "0.9s" },
   { title: "View Featured Beauticians", desc: "Explore our curated selection.", delay: "1.1s", isButton: true },
 ];
 
@@ -151,8 +158,23 @@ export default function HomePage() {
               style={{ animationDelay: tile.delay }}
               onClick={() => {
                 if (tile.isButton) {
-                  setCartItems((c) => c + 1);
-                  setShowCart(true);
+                  // setCartItems((c) => c + 1);
+                  // setShowCart(true);
+                } else if (tile.isClient) {
+                  localStorage.setItem("bundle", "user");
+                  window.location.assign("/signin.html");
+                } else if (tile.isSalon) {
+                  localStorage.setItem("bundle", "salon");
+                  window.location.assign("/signin.html");
+                } else if (tile.isBeauty) {
+                  localStorage.setItem("bundle", "beauty");
+                  window.location.assign("/signin.html");
+                } else if (tile.isGYM) {
+                  localStorage.setItem("bundle", "gym");
+                  window.location.assign("/signin.html");
+                } else if (tile.isTrainer) {
+                  localStorage.setItem("bundle", "trainer");
+                  window.location.assign("/signin.html");
                 }
               }}
             >
@@ -211,4 +233,4 @@ export default function HomePage() {
       `}</style>
     </div>
   );
-}
+
