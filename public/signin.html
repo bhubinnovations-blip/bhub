@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-md p-6 bg-white rounded-2xl shadow-lg">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back to BHub</h1>
+
+        <form class="space-y-5">
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="input-email" required placeholder="Enter your email address ( required )"
+                    class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="input-pass" required placeholder="Enter your password ( required )"
+                    class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <!-- Remember me & Forgot password -->
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center space-x-2">
+                    <input onclick="{showPassword()}" type="checkbox"
+                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <span onclick="{showPassword()}">Show password</span>
+                </label>
+                <a id="forgot-pass-btn" class="text-blue-600 hover:underline" style="cursor: pointer;">Forgot
+                    password?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" onclick="{login()}"
+                class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
+                Login
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="flex items-center my-6">
+            <hr class="flex-grow border-gray-300">
+            <span class="px-3 text-gray-500 text-sm">or</span>
+            <hr class="flex-grow border-gray-300">
+        </div>
+
+        <!-- Social Login -->
+        <div class="flex flex-col space-y-3">
+            <button
+                class="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                <span>Continue with Google</span>
+            </button>
+            <!-- <button class="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50">
+        <img src="https://www.svgrepo.com/show/448224/facebook.svg" alt="Facebook" class="w-5 h-5">
+        <span>Login with Facebook</span>
+      </button> -->
+        </div>
+
+        <!-- Signup link -->
+        <p class="text-sm text-center text-gray-600 mt-6">
+            Don’t have an account?
+            <a id="already-btn" class="text-blue-600 font-medium hover:underline" style="cursor: pointer;">Sign up</a>
+        </p>
+    </div>
+    <dialog id="alert-dialog">
+        <div style="height: 100%;">
+            <li style="position: relative; list-style-type: none; font-size: 17px; font-weight: 700;">Alert!</li>
+            <li id="dlg-text">Email ID and and
+                Password are required!</li>
+            <div style="position: relative; margin-top: 20px; align-items: end; justify-content: end; display: flex;">
+                <li id="dialog-yes-btn" onclick="closeDlg()">OK</li>
+            </div>
+        </div>
+    </dialog>
+    <script src="js/index.js"></script>
+    <script>
+        let alertDlg = document.getElementById('alert-dialog');
+
+        document.getElementById('forgot-pass-btn').addEventListener('click', (e) => {
+            window.location.assign("resetPass.html");
+        });
+
+        document.getElementById('already-btn').addEventListener('click', (e) => {
+            var bundle = localStorage.getItem("bundle");
+            if (bundle == "user") {
+                window.location.assign("signup.html");
+            } else if (bundle == "salon") {
+                window.location.assign("registersalon.html");
+            } else if (bundle == "beauty") {
+                window.location.assign("registerbeauty.html");
+            } else if (bundle == "gym") {
+                window.location.assign("registergym.html");
+            } else if (bundle == "trainer") {
+                window.location.assign("registertrainer.html");
+            }
+        });
+
+        function login() {
+            var emailId = document.getElementById('input-email').value;
+            var passWord = document.getElementById('input-pass').value;
+
+            if (emailId != "" && passWord != "") {
+                console.log(`Email ${emailId}`);
+                var result = firebase.auth().signInWithEmailAndPassword(emailId, passWord);
+                result.then(function (e) {
+                    window.location.assign("index.html");
+                });
+                result.catch(function (error) {
+
+                    const dlgText = document.getElementById('dlg-text');
+                    var errorMessage = "Something went wrong or invalid email address / password!";
+                    dlgText.innerHTML = errorMessage;
+                    alertDlg.showModal();
+
+                    console.log(`Error: ${errorMessage}`);
+
+                });
+            } else {
+                alertDlg.showModal();
+            }
+        }
+
+        // const openPrivacy = () => {
+        //     open("privacy.html");
+        // }
+
+        function closeDlg() {
+            alertDlg.close();
+        }
+
+        function showPassword() {
+            var x = document.getElementById("input-pass");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</body>
+
+</html>
