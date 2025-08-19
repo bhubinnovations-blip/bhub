@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -158,8 +157,6 @@ export default function HomePage() {
               style={{ animationDelay: tile.delay }}
               onClick={() => {
                 if (tile.isButton) {
-                  // setCartItems((c) => c + 1);
-                  // setShowCart(true);
                 } else if (tile.isClient) {
                   localStorage.setItem("bundle", "user");
                   window.location.assign("/signin.html");
@@ -233,4 +230,4 @@ export default function HomePage() {
       `}</style>
     </div>
   );
-
+}
