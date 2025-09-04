@@ -340,4 +340,5 @@ showCalendar(currentMonth, currentYear);
 //         stars[i].className = "star";
 //         i++;
 //     }
+
 // }
