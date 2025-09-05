@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
         const { to, subject, html } = await req.json();
         const email = {
-            from: 'BHub <cawine@cawineapp.com>',
+            from: 'BHub <admin@bhubcare.com>',
             to: [to],
             subject: subject,
             html: html
